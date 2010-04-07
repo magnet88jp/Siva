@@ -4,5 +4,9 @@
      base    = base
      home    = "${base}welcome"
      message = "${base}message"
+     testcase= "${base}testcase/list"
+     service = "${base}service"
+     about   = "${base}about"
+     contact = "${base}contact"
    }
 -%]

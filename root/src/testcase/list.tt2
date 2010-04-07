@@ -1,1 +1,3 @@
+[% META title = 'TestCase' %]
+[% META menu = 'testcase' %]
 Hello world from TT.
