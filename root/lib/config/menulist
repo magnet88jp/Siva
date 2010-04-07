@@ -1,0 +1,3 @@
+[%
+   site.menulist = [ 'home', 'testcase', 'service', 'about', 'contact' ]
+-%]
