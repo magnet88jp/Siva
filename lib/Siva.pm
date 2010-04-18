@@ -3,6 +3,8 @@ package Siva;
 use strict;
 use warnings;
 
+use Siva::Logic::Util;
+
 #
 # Set flags and add plugins for the application
 #

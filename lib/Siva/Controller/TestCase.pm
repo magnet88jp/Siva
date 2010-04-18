@@ -47,12 +47,12 @@ it under the same terms as Perl itself.
 
 =cut
 
-sub list :Local {
-    my ($self, $c) = @_;
-#    $self->base_list( $c, __PACKAGE__);
-#    $c->response->body( 'Hello World2!' );
-    $c->stash->{template} = 'testcase/list.tt2';
-#    $c->stash->{template} = 'welcome.tt2';
-}
+#sub list :Local {
+#    my ($self, $c) = @_;
+##    $self->base_list( $c, __PACKAGE__);
+##    $c->response->body( 'Hello World2!' );
+#    $c->stash->{template} = 'testcase/list.tt2';
+##    $c->stash->{template} = 'welcome.tt2';
+#}
 
 1;

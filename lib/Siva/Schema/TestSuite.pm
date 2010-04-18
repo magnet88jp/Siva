@@ -1,6 +1,6 @@
 package Siva::Schema::TestSuite;
 
-# Created by DBIx::Class::Schema::Loader v0.03007 @ 2010-04-05 09:58:06
+# Created by DBIx::Class::Schema::Loader v0.03007 @ 2010-04-18 18:10:10
 
 use strict;
 use warnings;
@@ -47,6 +47,11 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->has_many(
+  "suite_case_maps",
+  "SuiteCaseMap",
+  { "foreign.test_suite_id" => "self.id" },
+);
 
 1;
 

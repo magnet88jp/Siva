@@ -6,8 +6,9 @@ use base 'Catalyst::Model::DBIC::Schema';
 __PACKAGE__->config(
     schema_class => 'Siva::Schema',
     connect_info => [
-        'dbi:Pg:dbname=siva_nishino;host=st-db-dash.shanon.co.jp',
-        'nishino',
+        'dbi:Pg:dbname=Siva;host=pgsql.magnet.mydns.jp',
+        'dbuser',
+        'P@ssw0rd',
         
     ],
 );
