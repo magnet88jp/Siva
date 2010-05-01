@@ -13,8 +13,11 @@ sub list :Local {
     
     $c->stash->{path} = Siva::Logic::Util->getControllerPathName($c->req->path, $parent_id);
     my $sname = Siva::Logic::Util->getSchemaClassName($c->req->path);
+$c->log->debug("c-req-path=".$c->req->path);
 $c->log->debug("sname=".$sname);
     my $cname = Siva::Logic::Util->getControllerLCName($c->req->path);
+$c->log->debug("cname=".$cname);
+$c->log->debug("page=". $c->req->param('page') );
     $c->stash->{template} = $cname.'/list.tt2';
     my %search_cnd = keys(%$cnd) ? %$cnd : ();
     my %search_opt = keys(%$opt) ? %$opt : ();
@@ -27,6 +30,20 @@ $c->log->debug("dcreqpath=".$c->req->path);
 #$c->log->debug("package=".$package);
 #    $c->stash->{model} = $c->model($sname)->search({%search_cnd}, {%search_opt});
     $c->stash->{model} = $c->model('DBIC')->resultset('TestCase')->search({%search_cnd}, {%search_opt});
+}
+
+sub show :LocalRegex('^(\d+)$') {
+    my ($self, $c, $parent_id, $id, $package) = @_;
+    $c->stash->{parent_id} = $parent_id;
+#$c->log->debug("parent_id=".$parent_id);
+#$c->log->debug("captures=".$c->req->captures->[0]);
+    $id = $c->req->captures->[0];
+    $c->stash->{path} = Siva::Logic::Util->getControllerPathName($c->req->path, $parent_id);
+    my $sname = Siva::Logic::Util->getSchemaClassName($c->req->path);
+    $c->stash->{model} = $c->model('DBIC')->resultset('TestCase')->find($id);
+    my $cname = Siva::Logic::Util->getControllerLCName($c->req->path);
+    $c->stash->{template} = $cname.'/show.tt2';
+
 }
 
 1;

@@ -4,7 +4,7 @@ use strict;
 use base 'Catalyst::View::TT';
 
 __PACKAGE__->config({
-    CATALYST_VAR => 'Catalyst',
+    CATALYST_VAR => 'c',
     INCLUDE_PATH => [
         Siva->path_to( 'root', 'src' ),
         Siva->path_to( 'root', 'lib' )
