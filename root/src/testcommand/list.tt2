@@ -1,0 +1,20 @@
+[% META title = 'Testcommand List' -%]
+[% PROCESS site/list_upper %]
+
+<table>
+<tr><th>id</th><th>command</th><th>target</th><th>value</th><th>show</th><th>edit</th><th>delete</th></tr>
+[% WHILE ( data = model.next) -%]
+  <tr>
+    <td>[% data.id %]</td>
+    <td>[% data.command %]</td>
+    <td>[% data.target %]</td>
+    <td>[% data.value %]</td>
+    <td><a href="./[% data.id %]">show</a></td>
+    <td><a href="./[% data.id %]/edit">edit</a></td>
+    <td><a href="./[% data.id %]/destory">delete</a></td>
+  </tr>
+[% END -%]
+</table>
+
+[% PROCESS site/list_lower %]
+
