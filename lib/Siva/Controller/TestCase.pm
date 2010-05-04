@@ -47,12 +47,15 @@ it under the same terms as Perl itself.
 
 =cut
 
-#sub list :Local {
-#    my ($self, $c) = @_;
-##    $self->base_list( $c, __PACKAGE__);
-##    $c->response->body( 'Hello World2!' );
-#    $c->stash->{template} = 'testcase/list.tt2';
-##    $c->stash->{template} = 'welcome.tt2';
-#}
+sub create :Local {
+    my ($self, $c) = @_;
+    my %data = (
+      name        => $c->request->parameters->{name},
+      filename    => $c->request->parameters->{filename},
+      tags        => $c->request->parameters->{tags},
+      explanation => $c->request->parameters->{explanation},
+    );
+    $self->SUPER::create( $c, \%data);
+}
 
 1;

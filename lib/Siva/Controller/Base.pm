@@ -32,4 +32,23 @@ sub show :LocalRegex('^(\d+)$') {
     $c->stash->{template} = $bt.'/show.tt2';
 }
 
+sub post :Local {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    $c->stash->{path} = Siva::Logic::Util->getBasePathName($path);
+    my $bt= Siva::Logic::Util->getBaseTemplateName($path);
+    $c->stash->{template} = $bt.'/post.tt2';
+}
+
+sub create :Local {
+    my ($self, $c, $data) = @_;
+    my $path = $c->req->path;
+    my %model_data = keys(%$data) ? %$data : ();
+    my $bm = Siva::Logic::Util->getBaseModelName($path);
+    my $model = $c->model('DBIC')->resultset($bm)->create({%model_data});
+    my $bp = Siva::Logic::Util->getBasePathName($path);
+    $c->res->body('redirect');
+    $c->res->redirect('../'.$bp.'/'.$model->id, 303);
+}
+
 1;
