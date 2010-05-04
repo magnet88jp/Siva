@@ -9,7 +9,7 @@ use Data::Page::Navigation;
 sub list :Local {
     my ($self, $c, $cnd, $opt) = @_;
     my $path = $c->req->path;
-    $c->stash->{path} = Siva::Logic::Util->getBasePathName($path);
+#    $c->stash->{path} = Siva::Logic::Util->getBasePathName($path);
     my $bt = Siva::Logic::Util->getBaseTemplateName($path);
     $c->stash->{template} = $bt.'/list.tt2';
     my %search_cnd = keys(%$cnd) ? %$cnd : ();
@@ -25,7 +25,6 @@ sub show :LocalRegex('^(\d+)$') {
     my ($self, $c) = @_;
     my $id = $c->req->captures->[0];
     my $path = $c->req->path;
-    $c->stash->{path} = Siva::Logic::Util->getBasePathName($path);
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
     my $bt = Siva::Logic::Util->getBaseTemplateName($path);
@@ -35,7 +34,6 @@ sub show :LocalRegex('^(\d+)$') {
 sub post :Local {
     my ($self, $c) = @_;
     my $path = $c->req->path;
-    $c->stash->{path} = Siva::Logic::Util->getBasePathName($path);
     my $bt= Siva::Logic::Util->getBaseTemplateName($path);
     $c->stash->{template} = $bt.'/post.tt2';
 }
@@ -46,9 +44,8 @@ sub create :Local {
     my %model_data = keys(%$data) ? %$data : ();
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     my $model = $c->model('DBIC')->resultset($bm)->create({%model_data});
-    my $bp = Siva::Logic::Util->getBasePathName($path);
     $c->res->body('redirect');
-    $c->res->redirect('../'.$bp.'/'.$model->id, 303);
+    $c->res->redirect('./'.$model->id, 303);
 }
 
 1;

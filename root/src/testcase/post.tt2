@@ -1,6 +1,6 @@
 [% META title = 'TestCase New' -%]
 
-<form action="../[% path -%]/create" method="POST">
+<form action="./create" method="POST">
 <table>
 <tr><th>name</th><td><input type="text" name="name" /></td></tr>
 <tr><th>filename</th><td><input type="text" name="filename" /></td></tr>
