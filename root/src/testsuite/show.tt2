@@ -1,0 +1,23 @@
+[% META title = 'TestSuite Show' -%]
+[% PROCESS site/show_upper -%]
+
+<table>
+<tr><th>id</th><td>[% model.id %]</td></tr>
+<tr><th>name</th><td>[% model.name %]</td></tr>
+</table>
+<form action="./[% model.id -%]/suitecasemap" method="GET">
+  <input type="submit" value="TestCase編集" />
+</form>
+<table>
+<tr><th>#</th><th>testcase_id</th><th>testcase_name</th></tr>
+[% FOREACH data = model.suite_case_maps %]
+<tr>
+  <td>[% data.map_order %]</td>
+  <td>[% data.test_case_id.id %]</td>
+  <td>[% data.test_case_id.name %]</td>
+</tr>
+[% END %]
+</table>
+<form action="./[% model.id -%]/export" method="GET">
+  <input type="submit" value="エクスポート" />
+</form>

@@ -4,6 +4,7 @@ package Siva::Logic::Util;
 my %pathmap = (
   'testcase'    => 'TestCase',
   'testcommand' => 'TestCommand',
+  'testsuite' => 'TestSuite',
 );
 
 sub getBaseModelName {
