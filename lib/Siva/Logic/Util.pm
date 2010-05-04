@@ -19,12 +19,5 @@ sub getBaseTemplateName {
     return $name;
 }
 
-sub getBasePathName {
-    my ($self, $path) = @_;
-    $path=~ /^(\w+)/;
-    my $name = lc( $pathmap{$1} );
-    return $name;
-}
-
 1;
 
