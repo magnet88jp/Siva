@@ -6,10 +6,15 @@ use base 'Catalyst::Controller';
 
 use Data::Page::Navigation;
 
+sub index :Local {
+    my ($self, $c) = @_;
+    $c->res->body('redirect');
+    $c->res->redirect('./list', 303);
+}
+
 sub list :Local {
     my ($self, $c, $cnd, $opt) = @_;
     my $path = $c->req->path;
-#    $c->stash->{path} = Siva::Logic::Util->getBasePathName($path);
     my $bt = Siva::Logic::Util->getBaseTemplateName($path);
     $c->stash->{template} = $bt.'/list.tt2';
     my %search_cnd = keys(%$cnd) ? %$cnd : ();
@@ -21,7 +26,14 @@ sub list :Local {
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->search({%search_cnd}, {%search_opt});
 }
 
-sub show :LocalRegex('^(\d+)$') {
+sub id :LocalRegex('^(\d+)$') {
+    my ($self, $c) = @_;
+    my $id = $c->req->captures->[0];
+    $c->res->body('redirect');
+    $c->res->redirect('./'.$id.'/show', 303);
+}
+
+sub show :LocalRegex('^(\d+)\/show$') {
     my ($self, $c) = @_;
     my $id = $c->req->captures->[0];
     my $path = $c->req->path;
@@ -45,7 +57,48 @@ sub create :Local {
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     my $model = $c->model('DBIC')->resultset($bm)->create({%model_data});
     $c->res->body('redirect');
-    $c->res->redirect('./'.$model->id, 303);
+    $c->res->redirect('./'.$model->id.'/show', 303);
+}
+
+sub edit :LocalRegex('^(\d+)\/edit$') {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    my $id = $c->req->captures->[0];
+    my $bm = Siva::Logic::Util->getBaseModelName($path);
+    $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
+    my $bt= Siva::Logic::Util->getBaseTemplateName($path);
+    $c->stash->{template} = $bt.'/edit.tt2';
+}
+
+sub update :LocalRegex('^(\d+)\/update$') {
+    my ($self, $c, $data) = @_;
+    my $path = $c->req->path;
+    my $id = $c->req->captures->[0];
+    my %model_data = keys(%$data) ? %$data : ();
+    my $bm = Siva::Logic::Util->getBaseModelName($path);
+    $c->model('DBIC')->resultset($bm)->find($id)->update({%model_data});
+    $c->res->body('redirect');
+    $c->res->redirect('./show', 303);
+}
+
+sub delete :LocalRegex('^(\d+)\/delete$') {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    my $id = $c->req->captures->[0];
+    my $bm = Siva::Logic::Util->getBaseModelName($path);
+    $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
+    my $bt= Siva::Logic::Util->getBaseTemplateName($path);
+    $c->stash->{template} = $bt.'/show.tt2';
+}
+
+sub destroy :LocalRegex('^(\d+)\/destroy$') {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    my $id = $c->req->captures->[0];
+    my $bm = Siva::Logic::Util->getBaseModelName($path);
+    $c->model('DBIC')->resultset($bm)->find($id)->delete;
+    $c->res->body('redirect');
+    $c->res->redirect('../list', 303);
 }
 
 1;

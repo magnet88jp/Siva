@@ -58,4 +58,15 @@ sub create :Local {
     $self->SUPER::create( $c, \%data);
 }
 
+sub update :LocalRegex('^(\d+)\/update$') {
+    my ($self, $c) = @_;
+    my %data = (
+      name        => $c->request->parameters->{name},
+      filename    => $c->request->parameters->{filename},
+      tags        => $c->request->parameters->{tags},
+      explanation => $c->request->parameters->{explanation},
+    );
+    $self->SUPER::update( $c, \%data);
+}
+
 1;

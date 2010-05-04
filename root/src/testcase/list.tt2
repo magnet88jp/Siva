@@ -21,9 +21,9 @@
     <td>[% data.tags -%]</td>
     <td>[% data.explanation -%]</td>
     <td>[% tt_tc = [ ]; tt_tc.push(tc) FOREACH tc IN data.case_command_maps %] [% tt_tc.size %]</td>
-    <td><a href="./[% data.id -%]">show</a></td>
+    <td><a href="./[% data.id -%]/show">show</a></td>
     <td><a href="./[% data.id -%]/edit">edit</a></td>
-    <td><a href="./[% data.id -%]/delete">delete</a></td>
+    <td><a href="./[% data.id -%]/destroy">delete</a></td>
   </tr>
 [% END -%]
 </table>
