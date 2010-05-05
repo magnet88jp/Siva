@@ -98,7 +98,7 @@ sub importdata :Local {
       tags => $c->request->parameters->{tags},
       explanation => $c->request->parameters->{explanation},
     );    
-    my $model = $c->model($bm)->create({%data});
+    my $model = $c->model('DBIC')->resultset($bm)->create({%data});
     my $model_id = $model->id;
     # get node to array
     my $xpath = "//tbody/tr";
@@ -112,7 +112,7 @@ sub importdata :Local {
         value        => $node->findvalue( "td[3]" ),
       );
       my $bcm = Siva::Logic::Util->getBaseChildModelName($path);
-      my $model_child = $c->model($bcm)->create({%data_child});
+      my $model_child = $c->model('DBIC')->resultset($bcm)->create({%data_child});
       my $model_child_id = $model_child->id;
       my %data_map = (
         test_case_id    => $model_id,

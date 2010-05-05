@@ -18,6 +18,6 @@
 </tr>
 [% END %]
 </table>
-<form action="./[% model.id -%]/export" method="GET">
+<form action="./export" method="GET">
   <input type="submit" value="エクスポート" />
 </form>

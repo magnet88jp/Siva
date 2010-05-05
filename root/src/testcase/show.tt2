@@ -9,7 +9,7 @@
 <tr><th>tags</th><td>[% model.tags %]</td></tr>
 <tr><th>explanation</th><td>[% model.explanation %]</td></tr>
 </table>
-<form action="./casecommandmap" method="GET">
+<form action="../casecommandmap" method="GET">
   <input type="submit" value="TestCommand編集" />
 </form>
 <table>
