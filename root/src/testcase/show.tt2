@@ -9,7 +9,7 @@
 <tr><th>tags</th><td>[% model.tags %]</td></tr>
 <tr><th>explanation</th><td>[% model.explanation %]</td></tr>
 </table>
-<form action="[% path -%]/[% model.id -%]/casecommandmap" method="GET">
+<form action="./casecommandmap" method="GET">
   <input type="submit" value="TestCommand編集" />
 </form>
 <table>
@@ -23,9 +23,9 @@
 </tr>
 [% END %]
 </table>
-<form action="[% path -%]/[% model.id -%]/convert" method="GET">
+<form action="./convert" method="GET">
   <input type="submit" value="変換" />
 </form>
-<form action="[% path -%]/[% model.id -%]/export" method="GET">
+<form action="./export" method="GET">
   <input type="submit" value="エクスポート" />
 </form>

@@ -101,4 +101,24 @@ sub destroy :LocalRegex('^(\d+)\/destroy$') {
     $c->res->redirect('../list', 303);
 }
 
+sub import :Local {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    my $bt = Siva::Logic::Util->getBaseTemplateName($path);
+    $c->stash->{template} = $bt.'/import.tt2';
+}
+
+sub importdata :Local {
+    my ($self, $c) = @_;
+    $c->res->body('redirect');
+    $c->res->redirect('../list', 303);
+}
+
+sub export :LocalRegex('^(\d+)\/export$') {
+    my ($self, $c) = @_;
+    my $id = $c->req->captures->[0];
+    $c->res->body('redirect');
+    $c->res->redirect('./show', 303);
+}
+
 1;
