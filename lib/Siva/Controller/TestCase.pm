@@ -150,10 +150,12 @@ sub export :LocalRegex('^(\d+)\/export$') {
     }
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     my $model = $c->model('DBIC')->resultset($bm)->find($id);
+
     # create testcase file
     my $casefilename = $model->filename || "case.html";
     my $casefile = $casedir."/".$casefilename;
     my $casename = $model->name || "no name";
+
     # make testcase string;
     my $dom = XML::LibXML::Document->new('1.0', 'UTF-8');
     $dom->createInternalSubset("html", "-//W3C//DTD XHTML 1.0 Strict//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
@@ -184,18 +186,15 @@ sub export :LocalRegex('^(\d+)\/export$') {
     $tr->appendChild($td);
     $thead->appendChild($tr);
     my $tbody = $dom->createElement('tbody');
+
     # add test command.
-
-
-# TODO: order
-#    my $bmm = Siva::Logic::Util->getBaseMapModelName($path);
-#    my $model_map = $c->model('DBIC')->resultset($bmm)->search({
-#      test_case_id => $id
-#      },{
-#      order_by => [ 'map_order' ]
-#    });
-#    foreach my $data ( $model_map ) {
-    foreach my $data ( $model->case_command_maps ) {
+    my $bmm = Siva::Logic::Util->getBaseMapModelName($path);
+    my @model_map = $c->model('DBIC')->resultset($bmm)->search({
+      test_case_id => $id
+      },{
+      order_by => [ 'map_order' ]
+    });
+    foreach my $data ( @model_map ) {
       my $tr_b = $dom->createElement('tr');
       my $td_b1 = $dom->createElement('td');
       my $td_b2 = $dom->createElement('td');
@@ -222,6 +221,7 @@ sub export :LocalRegex('^(\d+)\/export$') {
       print $fh $text;
       $fh->close;
     }
+
     # create zip
     my $zip = Archive::Zip->new();
     $zip->addTree( $tmpdir );
@@ -238,6 +238,7 @@ sub export :LocalRegex('^(\d+)\/export$') {
       $c->res->body($body_text);
       $fh2->close;
     }
+
     #delete temp dir
     if( -d $tmpdir ) {
       remove_tree( $tmpdir );
