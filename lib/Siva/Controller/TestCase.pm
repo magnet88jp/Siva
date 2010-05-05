@@ -260,8 +260,9 @@ sub convert :LocalRegex('^(\d+)\/convert$') {
       my $base_num;
       if ($data->test_command_id->command =~ /^(type|select|checked)$/) {
         # もしvalueが既に変数だったら処理しない
-        next if ($data->test_command_id->value =~ /^\$/);
-#        next if ($data->test_command_id->value =~ /^\$\{\w\.\w\}/);
+#        next if ($data->test_command_id->value =~ /^\$/);
+#        next if ($data->test_command_id->value =~ /^\$\{\w+\.\w+\}/);
+        if ($data->test_command_id->value !~ /^\$\{\w+\.\w+\}/) {
         my %child_data_new = (
           command => "setCaseValue",
           target  => $casename.'.'.$data->test_command_id->id,
@@ -291,6 +292,7 @@ sub convert :LocalRegex('^(\d+)\/convert$') {
           value   => '${'.$casename.'.'.$data->test_command_id->id.'}'
         );
         my $child_model_cur = $c->model('DBIC')->resultset($bcm)->find($data->test_command_id->id)->update({%child_data_cur});
+        }
         $base_num = CMND1_BASE;
       } elsif ($data->test_command_id->command =~ /^(setCaseValue)$/) {
         $base_num = CASE1_BASE;
