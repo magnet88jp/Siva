@@ -28,14 +28,14 @@ sub list :Local {
 
 sub id :LocalRegex('^(\d+)$') {
     my ($self, $c) = @_;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     $c->res->body('redirect');
     $c->res->redirect('./'.$id.'/show', 303);
 }
 
 sub show :LocalRegex('^(\d+)\/show$') {
     my ($self, $c) = @_;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $path = $c->req->path;
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
@@ -63,7 +63,7 @@ sub create :Local {
 sub edit :LocalRegex('^(\d+)\/edit$') {
     my ($self, $c) = @_;
     my $path = $c->req->path;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
     my $bt= Siva::Logic::Util->getBaseTemplateName($path);
@@ -73,7 +73,7 @@ sub edit :LocalRegex('^(\d+)\/edit$') {
 sub update :LocalRegex('^(\d+)\/update$') {
     my ($self, $c, $data) = @_;
     my $path = $c->req->path;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my %model_data = keys(%$data) ? %$data : ();
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->model('DBIC')->resultset($bm)->find($id)->update({%model_data});
@@ -84,7 +84,7 @@ sub update :LocalRegex('^(\d+)\/update$') {
 sub delete :LocalRegex('^(\d+)\/delete$') {
     my ($self, $c) = @_;
     my $path = $c->req->path;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
     my $bt= Siva::Logic::Util->getBaseTemplateName($path);
@@ -94,7 +94,7 @@ sub delete :LocalRegex('^(\d+)\/delete$') {
 sub destroy :LocalRegex('^(\d+)\/destroy$') {
     my ($self, $c) = @_;
     my $path = $c->req->path;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->model('DBIC')->resultset($bm)->find($id)->delete;
     $c->res->body('redirect');
@@ -116,7 +116,7 @@ sub importdata :Local {
 
 sub export :LocalRegex('^(\d+)\/export$') {
     my ($self, $c) = @_;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     $c->res->body('redirect');
     $c->res->redirect('./show', 303);
 }
