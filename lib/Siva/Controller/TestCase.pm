@@ -129,7 +129,7 @@ sub importdata :Local {
 
 sub export :LocalRegex('^(\d+)\/export$') {
     my ($self, $c) = @_;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $path = $c->req->path;
     # make directory for testcase
     my $tmpdir = tempdir( CLEANUP => 1 );
@@ -247,7 +247,7 @@ sub export :LocalRegex('^(\d+)\/export$') {
 
 sub convert :LocalRegex('^(\d+)\/convert$') {
     my ($self, $c) = @_;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $path = $c->req->path;
     # get TestCommand
     my $bm = Siva::Logic::Util->getBaseModelName($path);

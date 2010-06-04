@@ -122,7 +122,7 @@ sub importdata :Local {
 
 sub export :LocalRegex('^(\d+)\/export$') {
     my ($self, $c) = @_;
-    my $id = $c->req->captures->[0];
+    my $id = $c->req->snippets->[0];
     my $path = $c->req->path;
 
     # make directory for testcase
