@@ -86,7 +86,7 @@ sub importdata :Local {
       tags => $c->request->parameters->{tags},
       explanation => $c->request->parameters->{explanation},
     );
-    my $model = $c->model($bm)->create({%data});
+    my $model = $c->model('DBIC')->resultset($bm)->create({%data});
     my $model_id = $model->id;
 
     # get node to array
