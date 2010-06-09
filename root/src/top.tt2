@@ -1,0 +1,5 @@
+[% META title = 'Catalyst/TT View!' %]
+<p>
+  Welcome to Selenium Integrated Value Assist.
+</p>
+<p>It's default user-extensions.js <a href="/static/js/user-extensions.js">here</a>.</p>

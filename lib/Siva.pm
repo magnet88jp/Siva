@@ -48,7 +48,14 @@ sub default : Private {
     my ( $self, $c ) = @_;
 
     # Hello World
-    $c->response->body( $c->welcome_message );
+#    $c->response->body( $c->welcome_message );
+    $c->res->body('redirect');
+    $c->res->redirect('/top', 303);
+}
+
+sub top : Global {
+    my ( $self, $c ) = @_;
+    $c->stash->{template} = 'top.tt2';
 }
 
 #

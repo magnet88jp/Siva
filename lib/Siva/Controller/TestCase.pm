@@ -251,53 +251,54 @@ sub convert :LocalRegex('^(\d+)\/convert$') {
     my $path = $c->req->path;
     # get TestCommand
     my $bm = Siva::Logic::Util->getBaseModelName($path);
+    my $bcm = Siva::Logic::Util->getBaseChildModelName($path);
+    my $bmm = Siva::Logic::Util->getBaseMapModelName($path);
     my $model = $c->model('DBIC')->resultset($bm)->find($id);
     my $casename = $model->name;
     my @order_bef = ();
     my %order_hash;
     # もし、入力コマンドがあったらTestCommand追加
+    my $flg_bind = 0;
     my $cnt = 0;
     foreach my $data ( $model->case_command_maps ) {
       my $base_num;
       if ($data->test_command_id->command =~ /^(type|select|checked)$/) {
         # もしvalueが既に変数だったら処理しない
-#        next if ($data->test_command_id->value =~ /^\$/);
-#        next if ($data->test_command_id->value =~ /^\$\{\w+\.\w+\}/);
         if ($data->test_command_id->value !~ /^\$\{\w+\.\w+\}/) {
-        my %child_data_new = (
-          command => "setCaseValue",
-          target  => $casename.'.'.$data->test_command_id->id,
-          value   => $data->test_command_id->value
-        );
-        my $bcm = Siva::Logic::Util->getBaseChildModelName($path);
-        my $child_model_new = $c->model('DBIC')->resultset($bcm)->create({%child_data_new});
-        my $child_model_new_id = $child_model_new->id;
-        $cnt++;
-        my $num_new = CASE1_BASE + $cnt;
-        push(@order_bef, $num_new);
-        # CaseCommandMap追加
-        my %map_data_new = (
-          test_case_id => $id,
-          test_command_id => $child_model_new_id,
-          map_order => $num_new
-        );
-        my $bmm = Siva::Logic::Util->getBaseMapModelName($path);
-        my $map_model_new = $c->model('DBIC')->resultset($bmm)->create({%map_data_new});
-        my $map_model_new_id = $map_model_new->id;
-        # テストコマンドのソート順を並び替え
-        # testcase_idで絞り込んだcase_command_mapをmap_order順に取得
-        # 仮オーダーのcommand_idハッシュ作成
-        $order_hash{$num_new} = $child_model_new_id;
-        # テストケースのvalueを変数に変換
-        my %child_data_cur = (
-          value   => '${'.$casename.'.'.$data->test_command_id->id.'}'
-        );
-        my $child_model_cur = $c->model('DBIC')->resultset($bcm)->find($data->test_command_id->id)->update({%child_data_cur});
+          my %child_data_new = (
+            command => "setCaseValue",
+            target  => $casename.'.'.$data->test_command_id->id,
+            value   => $data->test_command_id->value
+          );
+          my $child_model_new = $c->model('DBIC')->resultset($bcm)->create({%child_data_new});
+          my $child_model_new_id = $child_model_new->id;
+          $cnt++;
+          my $num_new = CASE1_BASE + $cnt;
+          push(@order_bef, $num_new);
+          # CaseCommandMap追加
+          my %map_data_new = (
+            test_case_id => $id,
+            test_command_id => $child_model_new_id,
+            map_order => $num_new
+          );
+          my $map_model_new = $c->model('DBIC')->resultset($bmm)->create({%map_data_new});
+          my $map_model_new_id = $map_model_new->id;
+          # テストコマンドのソート順を並び替え
+          # testcase_idで絞り込んだcase_command_mapをmap_order順に取得
+          # 仮オーダーのcommand_idハッシュ作成
+          $order_hash{$num_new} = $child_model_new_id;
+
+          # テストケースのvalueを変数に変換
+          my %child_data_cur = (
+            value   => '${'.$casename.'.'.$data->test_command_id->id.'}'
+          );
+          my $child_model_cur = $c->model('DBIC')->resultset($bcm)->find($data->test_command_id->id)->update({%child_data_cur});
         }
         $base_num = CMND1_BASE;
       } elsif ($data->test_command_id->command =~ /^(setCaseValue)$/) {
         $base_num = CASE1_BASE;
       } elsif ($data->test_command_id->command =~ /^(bindValue)$/) {
+        $flg_bind = 1;
         $base_num = CASE2_BASE;
       } else {
         $base_num = CMND1_BASE;
@@ -312,6 +313,32 @@ sub convert :LocalRegex('^(\d+)\/convert$') {
       # 仮オーダーのcommand_idハッシュ作成
       $order_hash{$num_cur} = $data->test_command_id->id;
     }
+    # もし、bindValueがなければTestCommand追加
+    if( $flg_bind == 0) {
+      my %child_data_new = (
+        command => "bindValue",
+        target  => $casename,
+        value   => ""
+      );
+      my $child_model_new = $c->model('DBIC')->resultset($bcm)->create({%child_data_new});
+      my $child_model_new_id = $child_model_new->id;
+      $cnt++;
+      my $num_new = CASE2_BASE + $cnt;
+      push(@order_bef, $num_new);
+      # CaseCommandMap追加
+      my %map_data_new = (
+        test_case_id => $id,
+        test_command_id => $child_model_new_id,
+        map_order => $num_new
+      );
+      my $map_model_new = $c->model('DBIC')->resultset($bmm)->create({%map_data_new});
+      my $map_model_new_id = $map_model_new->id;
+      # テストコマンドのソート順を並び替え
+      # testcase_idで絞り込んだcase_command_mapをmap_order順に取得
+      # 仮オーダーのcommand_idハッシュ作成
+      $order_hash{$num_new} = $child_model_new_id;
+    }
+
     # ソートする
     my @order_aft = sort {$a <=> $b} @order_bef;
 

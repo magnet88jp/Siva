@@ -10,5 +10,6 @@
      service = "/service"
      about   = "${base}about"
      contact = "${base}contact"
+     top = "/top"
    }
 -%]
