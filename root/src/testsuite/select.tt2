@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/static/css/jquery.multiselect2side.css" type="text/css" media="screen" />
 <script type="text/javascript" src="/static/js/jquery.js"></script>
 <script type="text/javascript" src="/static/js/jquery.multiselect2side.js"></script>
 <script type="text/javascript">
