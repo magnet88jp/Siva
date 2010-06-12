@@ -1,0 +1,41 @@
+[% META title = 'Testsuite Select' -%]
+[% PROCESS site/show_upper %]
+
+<div>
+<div style="float:left">
+<select size="10">
+[% FOREACH data = model.suite_case_maps %]
+<option value="[% data.map_order %]">[% data.test_case_id.id %] : [% data.test_case_id.name %]</option>
+[% END %]
+</select>
+</div>
+<div style="float:left">
+<ul>
+<li><input type="button" value=">>"></li>
+<li><input type="button" value=">"></li>
+<li><input type="button" value="<"></li>
+<li><input type="button" value="<<"></li>
+</ul>
+</div>
+<div style="float:left">
+<select size="10">
+[% FOREACH data = model.suite_case_maps %]
+<option value="[% data.map_order %]">[% data.test_case_id.id %] : [% data.test_case_id.name %]</option>
+[% END %]
+</select>
+</div>
+<div style="float:left">
+<ul>
+<li><input type="button" value="↑↑"></li>
+<li><input type="button" value="↑"></li>
+<li><input type="button" value="↓"></li>
+<li><input type="button" value="↓↓"></li>
+</ul>
+</div>
+</div>
+
+<div style="clear:left">
+<form action="/suitecasemap/select" method="GET">
+  <input type="submit" value="決定" />
+</form>
+</div>

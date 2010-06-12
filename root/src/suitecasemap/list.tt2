@@ -1,0 +1,20 @@
+[% META title = 'Suitecasemap List' -%]
+[% PROCESS site/list_upper %]
+
+<table>
+<tr><th>id</th><th>suite</th><th>case</th><th>order</th><th>show</th><th>edit</th><th>delete</th></tr>
+[% WHILE ( data = model.next) -%]
+  <tr>
+    <td>[% data.id %]</td>
+    <td>[% data.test_suite_id.id %] : [% data.test_suite_id.name %]</td>
+    <td>[% data.test_case_id.id %] : [% data.test_case_id.name %]</td>
+    <td>[% data.map_order %]</td>
+    <td><a href="./[% data.id %]">show</a></td>
+    <td><a href="./[% data.id %]/edit">edit</a></td>
+    <td><a href="./[% data.id %]/destory">delete</a></td>
+  </tr>
+[% END -%]
+</table>
+
+[% PROCESS site/list_lower %]
+

@@ -6,5 +6,24 @@
   <tr><th>id</th><td><label type="text" name="id">[% model.id -%]</label></td></tr>
   <tr><th>name</th><td><input type="text" name="name" value="[% model.name -%]"></td></tr>
 </table>
-<input type="submit" value="送信">
+<input type="submit" value="編集">
+</form>
+
+<h2>TestCase</h2>
+<a href="/testsuite/[% model.id -%]/select">select</a>
+
+<table>
+<tr><th>#</th><th>id</th><th>name</th><th>show</th><th>edit</th></tr>
+[% FOREACH data = model.suite_case_maps %]
+<tr>
+  <td>[% data.map_order %]</td>
+  <td>[% data.test_case_id.id %]</td>
+  <td>[% data.test_case_id.name %]</td>
+  <td><a href="/testcase/[% data.test_case_id.id %]/show">show</a></td>
+  <td><a href="/testcase/[% data.test_case_id.id %]/edit">edit</a></td>
+</tr>
+[% END %]
+</table>
+<form action="./export" method="GET">
+  <input type="submit" value="エクスポート" />
 </form>

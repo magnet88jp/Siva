@@ -121,4 +121,14 @@ sub export :LocalRegex('^(\d+)\/export$') {
     $c->res->redirect('./show', 303);
 }
 
+sub select :LocalRegex('^(\d+)\/select$') {
+    my ($self, $c) = @_;
+    my $id = $c->req->snippets->[0];
+    my $path = $c->req->path;
+    my $bm = Siva::Logic::Util->getBaseModelName($path);
+    $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
+    my $bt = Siva::Logic::Util->getBaseTemplateName($path);
+    $c->stash->{template} = $bt.'/select.tt2';
+}
+
 1;

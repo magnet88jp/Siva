@@ -1,0 +1,9 @@
+[% META title = 'SuiteCaseMap Show' -%]
+[% PROCESS site/show_upper -%]
+
+<table>
+  <tr><th>id</th><td>[% model.id %]</td></tr>
+  <tr><th>testsuite</th><td>[% model.test_suite_id.id %]:[% model.test_suite_id.name %]</td></tr>
+  <tr><th>testcase</th><td>[% model.test_case_id.id %]:[% model.test_case_id.name %]</td></tr>
+  <tr><th>map_order</th><td>[% model.map_order %]</td></tr>
+</table>

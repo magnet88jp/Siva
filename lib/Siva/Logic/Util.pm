@@ -5,6 +5,8 @@ my %pathmap = (
   'testcase'    => 'TestCase',
   'testcommand' => 'TestCommand',
   'testsuite'   => 'TestSuite',
+  'suitecasemap'=> 'SuiteCaseMap',
+  'casecommandmap' => 'CaseCommandMap',
 );
 
 my %childmap = (

@@ -5,16 +5,16 @@
 <tr><th>id</th><td>[% model.id %]</td></tr>
 <tr><th>name</th><td>[% model.name %]</td></tr>
 </table>
-<form action="./[% model.id -%]/suitecasemap" method="GET">
-  <input type="submit" value="TestCase編集" />
-</form>
+<h2>TestCase</h2>
 <table>
-<tr><th>#</th><th>testcase_id</th><th>testcase_name</th></tr>
+<tr><th>#</th><th>id</th><th>name</th><th>show</th><th>edit</th></tr>
 [% FOREACH data = model.suite_case_maps %]
 <tr>
   <td>[% data.map_order %]</td>
   <td>[% data.test_case_id.id %]</td>
   <td>[% data.test_case_id.name %]</td>
+  <td><a href="/testcase/[% data.test_case_id.id %]/show">show</a></td>
+  <td><a href="/testcase/[% data.test_case_id.id %]/edit">edit</a></td>
 </tr>
 [% END %]
 </table>
