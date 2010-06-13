@@ -57,13 +57,23 @@ it under the same terms as Perl itself.
 
 sub create :Local {
     my ($self, $c) = @_;
-    my %data = (name => $c->request->parameters->{name});
+    my %data = (
+      name        => $c->request->parameters->{name},
+      filename    => $c->request->parameters->{filename},
+      tags        => $c->request->parameters->{tags},
+      explanation => $c->request->parameters->{explanation},
+    );
     $self->SUPER::create( $c, \%data);
 }
 
 sub update :LocalRegex('^(\d+)\/update$') {
     my ($self, $c) = @_;
-    my %data = (name => $c->request->parameters->{name});
+    my %data = (
+      name        => $c->request->parameters->{name},
+      filename    => $c->request->parameters->{filename},
+      tags        => $c->request->parameters->{tags},
+      explanation => $c->request->parameters->{explanation},
+    );
     $self->SUPER::update( $c, \%data);
 }
 
@@ -242,6 +252,66 @@ sub export :LocalRegex('^(\d+)\/export$') {
     if( -d $tmpdir ) {
       remove_tree( $tmpdir );
     }
+}
+
+sub select :LocalRegex('^(\d+)\/select$') {
+    my ($self, $c) = @_;
+#$c->log->debug("param1=".$c->req->param('name'));
+$c->log->debug("param1=".$c->request->parameters->{name});
+
+#    my @data = [
+#      {name => $c->request->parameters->{name}},
+#      {tags => $c->request->parameters->{tags}},
+#    ];
+#    $self->SUPER::select( $c, \@data);
+    my %data = ();
+    $data{name} = '%'.$c->request->parameters->{name}.'%' if $c->request->parameters->{name};
+    $data{tags} = '%'.$c->request->parameters->{tags}.'%' if $c->request->parameters->{tags};
+    $data{explanation} = '%'.$c->request->parameters->{explanation}.'%' if $c->request->parameters->{explanation};
+    $c->stash->{param} = $c->request->parameters;
+    $self->SUPER::select( $c, \%data);
+}
+
+sub selectdata :LocalRegex('^(\d+)\/selectdata$') {
+    my ($self, $c) = @_;
+    my $id = $c->req->snippets->[0];
+    my $path = $c->req->path;
+    my $bmm = Siva::Logic::Util->getBaseMapModelName($path);
+    my %cnd = ();
+    $cnd{test_suite_id} = $id;
+    my $map_model = $c->model('DBIC')->resultset($bmm)->search({%cnd})->delete_all;
+#$c->log->debug("cases=".$c->request->parameters->{cases});
+#    my $cases = $c->request->parameters->{cases};
+    my $cases = $c->request->parameters->{casesms2side__dx};
+#$c->log->debug("ref=".ref($cases));
+#$c->log->debug("cases=".Dumper($cases));
+    if(ref($cases) eq "ARRAY") {
+      my @ar_cases = @$cases;
+      my $i = 0;
+      foreach my $case (@ar_cases) {
+        $i++;
+#$c->log->debug("case=".$case);
+        my %map_data_new = (
+          test_suite_id => $id,
+          test_case_id => $case,
+          map_order => $i,
+        );
+        my $map_model_new = $c->model('DBIC')->resultset($bmm)->create({%map_data_new});
+
+      }
+    } elsif(length($cases)) {
+#$c->log->debug("case=".$cases);
+      my %map_data_new = (
+        test_suite_id => $id,
+        test_case_id => $cases,
+        map_order => '1',
+      );
+      my $map_model_new = $c->model('DBIC')->resultset($bmm)->create({%map_data_new});
+    }
+
+    $c->res->body('redirect');
+    $c->res->redirect('./show', 303);
+
 }
 
 1;

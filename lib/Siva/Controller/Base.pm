@@ -122,11 +122,21 @@ sub export :LocalRegex('^(\d+)\/export$') {
 }
 
 sub select :LocalRegex('^(\d+)\/select$') {
-    my ($self, $c) = @_;
+    my ($self, $c, $cnd, $opt) = @_;
     my $id = $c->req->snippets->[0];
     my $path = $c->req->path;
     my $bm = Siva::Logic::Util->getBaseModelName($path);
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->find($id);
+    my %search_cnd = keys(%$cnd) ? %$cnd : ();
+#    my @search_cnd = #$cnd ? @$cnd : ();
+    my %search_opt = keys(%$opt) ? %$opt : ();
+    my $bcm = Siva::Logic::Util->getBaseChildModelName($path);
+$c->log->debug("bcm=".$bcm);
+#    $c->stash->{model_child} = $c->model('DBIC')->resultset($bcm)->search(@search_cnd, {%search_opt});
+#    $c->stash->{model_child} = $c->model('DBIC')->resultset($bcm)->search({%search_cnd}, {%search_opt});
+    $c->stash->{model_child} = $c->model('DBIC')->resultset($bcm)->search_like({%search_cnd}, {%search_opt});
+
+$c->log->debug("model_child=".$c->stash->{model_child});
     my $bt = Siva::Logic::Util->getBaseTemplateName($path);
     $c->stash->{template} = $bt.'/select.tt2';
 }

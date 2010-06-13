@@ -4,8 +4,13 @@
 <table>
 <tr><th>id</th><td>[% model.id %]</td></tr>
 <tr><th>name</th><td>[% model.name %]</td></tr>
+<tr><th>filename</th><td>[% model.filename %]</td></tr>
+<tr><th>tags</th><td>[% model.tags %]</td></tr>
+<tr><th>explanation</th><td>[% model.explanation %]</td></tr>
 </table>
 <h2>TestCase</h2>
+<a href="/testsuite/[% model.id -%]/select">select</a>
+
 <table>
 <tr><th>#</th><th>id</th><th>name</th><th>show</th><th>edit</th></tr>
 [% FOREACH data = model.suite_case_maps %]

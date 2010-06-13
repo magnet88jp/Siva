@@ -9,14 +9,27 @@ jQuery(document).ready(function($){
 [% META title = 'Testsuite Select' -%]
 [% PROCESS site/show_upper %]
 
-<div>
-<select multiple="multiple" size="10" id="first">
-[% FOREACH data = model.suite_case_maps %]
-<option value="[% data.map_order %]">[% data.test_case_id.id %] : [% data.test_case_id.name %]</option>
-[% END %]
-</select>
-</div>
+<form action="/testsuite/[% model.id -%]/select" method="POST">
+  <div>
+  <label for="name">name</label> <input type="text" name="name" id="name" value="[% param.name %]"/>
+  <label for="tags">tags</label> <input type="text" name="tags" id="tags" value="[% param.tags %]"/>
+  <label for="explanation">explanation</label> <input type="text" name="explanation" id="explanation" value="[% param.explanation %]"/>
+  </div>
+  <div>
+    <input type="submit" value="検索" />
+  </div>
+</form>
+<form action="/testsuite/[% model.id %]/selectdata" method="POST">
+  <div>
+  <select name="cases" multiple="multiple" size="10" id="first">
+  [% FOREACH data = model.suite_case_maps %]
+  <option selected="selected" value="[% data.test_case_id.id %]">[% data.test_case_id.id %] : [% data.test_case_id.name %]</option>
+  [% END %]
+  [% WHILE ( data2 = model_child.next) -%]
+  <option value="[% data2.id %]">[% data2.id %] : [% data2.name %]</option>
+  [% END %]
+  </select>
+  </div>
 
-<form action="/suitecasemap/select" method="GET">
   <input type="submit" value="決定" />
 </form>
