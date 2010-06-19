@@ -83,7 +83,7 @@ sub importdata :Local {
 
     my $upload;
     unless ($upload = $c->req->upload('filename') ) {
-      $c->detach('index');
+      $c->detach('create');
     }
     my $parser = XML::LibXML->new();
     $parser->recover_silently(1);

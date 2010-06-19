@@ -108,6 +108,15 @@ sub import :Local {
     $c->stash->{template} = $bt.'/import.tt2';
 }
 
+sub importone :LocalRegex('^(\d+)\/import$') {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    my $id = $c->req->snippets->[0];
+    my $bt = Siva::Logic::Util->getBaseTemplateName($path);
+    $c->stash->{template} = $bt.'/import.tt2';
+    $c->stash->{id} = $id;
+}
+
 sub importdata :Local {
     my ($self, $c) = @_;
     $c->res->body('redirect');

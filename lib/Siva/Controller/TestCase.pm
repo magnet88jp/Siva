@@ -86,7 +86,7 @@ sub importdata :Local {
     my $path = $c->req->path;
     my $upload;
     unless ($upload = $c->req->upload('filename') ) {
-      $c->detach('index');
+      $c->detach('create');
     }
     my $parser = XML::LibXML->new();
     $parser->recover_silently(1);
@@ -125,6 +125,50 @@ sub importdata :Local {
     }
     $c->res->body('redirect');
     $c->res->redirect('./'.$model_id, 303);
+}
+
+sub importdataone :LocalRegex('^(\d+)\/importdata$') {
+    my ($self, $c) = @_;
+    my $path = $c->req->path;
+    my $id = $c->req->snippets->[0];
+    my $upload;
+    unless ($upload = $c->req->upload('filename') ) {
+      $c->detach('index');
+    }
+
+    my $parser = XML::LibXML->new();
+    $parser->recover_silently(1);
+    my $doc = $parser->parse_html_file($upload->tempname);
+
+    my $model_id = $id;
+    # get node to array
+    my $xpath = "//tbody/tr";
+    my @nodes = $doc->findnodes( $xpath );
+    my $i = 0;
+    foreach my $node (@nodes) {
+      $i++;
+      my %data_child = (
+        command      => $node->findvalue( "td[1]" ),
+        target       => $node->findvalue( "td[2]" ),
+        value        => $node->findvalue( "td[3]" ),
+      );
+      
+      my $bcm = Siva::Logic::Util->getBaseChildModelName($path);
+      my $model_child = $c->model('DBIC')->resultset($bcm)->create({%data_child});
+      my $model_child_id = $model_child->id;
+      my %data_map = (
+        test_case_id    => $model_id,
+        test_command_id => $model_child_id,
+        map_order       => $i,
+      );
+      my $bmm = Siva::Logic::Util->getBaseMapModelName($path);
+      my $model_map = $c->model('DBIC')->resultset($bmm)->create({%data_map});
+      my $model_map_id = $model_map->id;
+    }
+    $c->res->body('redirect');
+#    $c->res->redirect('./'.$model_id, 303);
+    $c->res->redirect('./show', 303);
+
 }
 
 sub export :LocalRegex('^(\d+)\/export$') {

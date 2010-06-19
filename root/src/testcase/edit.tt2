@@ -11,6 +11,7 @@
   <tr><th>tags</th><td><input type="text" name="tags" value="[% model.tags -%]"></td></tr>
   <tr><th>explanation</th><td><input type="text" name="explanation" value="[% model.explanation -%]"></td></tr>
 </table>
+<a href="./import">import</a>
 <table>
 <tr><th>testcommand</th><th>id</th><th>command</th><th>target</th><th>value</th></tr>
 [% FOREACH data = model.case_command_maps %]
