@@ -55,6 +55,20 @@ it under the same terms as Perl itself.
 
 =cut
 
+sub list :Local {
+    my ($self, $c) = @_;
+    my %data = ();
+#$c->log->debug("param1=".$c->request->parameters->{tags});
+#    $data{name} = '%'.$c->request->parameters->{name}.'%' if $c->request->parameters->{name};
+#    $data{tags} = '%'.$c->request->parameters->{tags}.'%' if $c->request->parameters->{tags};
+#    $data{explanation} = '%'.$c->request->parameters->{explanation}.'%' if $c->request->parameters->{explanation};
+    $data{name} = { -like => '%'.$c->request->parameters->{name}.'%'} if $c->request->parameters->{name};
+    $data{tags} = { -like => '%'.$c->request->parameters->{tags}.'%'} if $c->request->parameters->{tags};
+    $data{explanation} = { -like => '%'.$c->request->parameters->{explanation}.'%'} if $c->request->parameters->{explanation};
+    $c->stash->{param} = $c->request->parameters;
+    $self->SUPER::list( $c, \%data);
+}
+
 sub create :Local {
     my ($self, $c) = @_;
     my %data = (
@@ -257,7 +271,7 @@ sub export :LocalRegex('^(\d+)\/export$') {
 sub select :LocalRegex('^(\d+)\/select$') {
     my ($self, $c) = @_;
 #$c->log->debug("param1=".$c->req->param('name'));
-$c->log->debug("param1=".$c->request->parameters->{name});
+#$c->log->debug("param1=".$c->request->parameters->{name});
 
 #    my @data = [
 #      {name => $c->request->parameters->{name}},

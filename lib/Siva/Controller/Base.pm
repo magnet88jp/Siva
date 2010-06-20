@@ -5,6 +5,7 @@ use warnings;
 use base 'Catalyst::Controller';
 
 use Data::Page::Navigation;
+use Data::Dumper;
 
 sub index :Local {
     my ($self, $c) = @_;
@@ -17,12 +18,14 @@ sub list :Local {
     my $path = $c->req->path;
     my $bt = Siva::Logic::Util->getBaseTemplateName($path);
     $c->stash->{template} = $bt.'/list.tt2';
+#$c->log->debug("cnd=".Dumper($cnd));
     my %search_cnd = keys(%$cnd) ? %$cnd : ();
     my %search_opt = keys(%$opt) ? %$opt : ();
     $search_opt{page} = $search_opt{page} || $c->req->param('page') || 1;
     $search_opt{rows} = $search_opt{rows} || $c->req->param('rows') || 10;
     $search_opt{order_by} = $search_opt{order_by} || 'id';
     my $bm = Siva::Logic::Util->getBaseModelName($path);
+#    $c->stash->{model} = $c->model('DBIC')->resultset($bm)->search_like({%search_cnd}, {%search_opt});
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->search({%search_cnd}, {%search_opt});
 }
 
@@ -140,12 +143,12 @@ sub select :LocalRegex('^(\d+)\/select$') {
 #    my @search_cnd = #$cnd ? @$cnd : ();
     my %search_opt = keys(%$opt) ? %$opt : ();
     my $bcm = Siva::Logic::Util->getBaseChildModelName($path);
-$c->log->debug("bcm=".$bcm);
+#$c->log->debug("bcm=".$bcm);
 #    $c->stash->{model_child} = $c->model('DBIC')->resultset($bcm)->search(@search_cnd, {%search_opt});
 #    $c->stash->{model_child} = $c->model('DBIC')->resultset($bcm)->search({%search_cnd}, {%search_opt});
     $c->stash->{model_child} = $c->model('DBIC')->resultset($bcm)->search_like({%search_cnd}, {%search_opt});
 
-$c->log->debug("model_child=".$c->stash->{model_child});
+#$c->log->debug("model_child=".$c->stash->{model_child});
     my $bt = Siva::Logic::Util->getBaseTemplateName($path);
     $c->stash->{template} = $bt.'/select.tt2';
 }

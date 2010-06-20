@@ -1,6 +1,13 @@
 [% META title = 'Testsuite List' -%]
 [% PROCESS site/list_upper %]
 
+<form action="./list" method="POST">
+  <table>
+    <tr><td>name</td><td><input type="text" name="name" value="[% param.name %]"></td><td>tags</td><td><input type="text" name="tags" value="[% param.tags %]"></td><td>explanation</td><td><input type="text" name="explanation" value="[% param.explanation %]"></td></tr>
+  </table>
+  <input type="submit" name="submit">
+</form>
+
 <p><a href="./import">import</a></p>
 <table>
 <tr><th>id</th><th>name</th><th>filename</th><th>tags</th><th>explanation</th><th>test_case_num</th><th>show</th><th>edit</th><th>delete</th></tr>

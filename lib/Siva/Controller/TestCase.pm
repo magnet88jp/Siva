@@ -59,6 +59,16 @@ it under the same terms as Perl itself.
 
 =cut
 
+sub list :Local {
+    my ($self, $c) = @_;
+    my %data = ();
+    $data{name} = { -like => '%'.$c->request->parameters->{name}.'%'} if $c->request->parameters->{name};
+    $data{tags} = { -like => '%'.$c->request->parameters->{tags}.'%'} if $c->request->parameters->{tags};
+    $data{explanation} = { -like => '%'.$c->request->parameters->{explanation}.'%'} if $c->request->parameters->{explanation};
+    $c->stash->{param} = $c->request->parameters;
+    $self->SUPER::list( $c, \%data);
+}
+
 sub create :Local {
     my ($self, $c) = @_;
     my %data = (

@@ -4,9 +4,9 @@
 
 [% PROCESS site/list_upper %]
 
-<form action="./search" method="POST">
+<form action="./list" method="POST">
   <table>
-    <tr><td>tags</td><td><input type="text" name="tags" value="[% search_cnd.tags %]"></td><td>explanation</td><td><input type="text" name="explanation" value="[% search_cnd.explanation %]"></td></tr>
+    <tr><td>name</td><td><input type="text" name="name" value="[% param.name %]"></td><td>tags</td><td><input type="text" name="tags" value="[% param.tags %]"></td><td>explanation</td><td><input type="text" name="explanation" value="[% param.explanation %]"></td></tr>
   </table>
   <input type="submit" name="submit">
 </form>
