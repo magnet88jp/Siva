@@ -25,6 +25,7 @@ sub list :Local {
     $search_opt{rows} = $search_opt{rows} || $c->req->param('rows') || 10;
     $search_opt{order_by} = $search_opt{order_by} || 'id';
     my $bm = Siva::Logic::Util->getBaseModelName($path);
+#$c->log->debug("search_opt=".Dumper({%search_opt}));
 #    $c->stash->{model} = $c->model('DBIC')->resultset($bm)->search_like({%search_cnd}, {%search_opt});
     $c->stash->{model} = $c->model('DBIC')->resultset($bm)->search({%search_cnd}, {%search_opt});
 }

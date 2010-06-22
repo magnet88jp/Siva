@@ -76,7 +76,7 @@ sub end : Private {
     my ( $self, $c ) = @_;
 
     # Forward to View unless response body is already defined
-    $c->forward( $c->view('') ) unless $c->response->body;
+    $c->forward( $c->view('TT') ) unless $c->response->body;
 }
 
 =head1 AUTHOR
